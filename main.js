@@ -12,13 +12,16 @@ const printToDom = (students, textToPrint) => {
 const handleStartButtonClick = (e) => {
   hogwartsForm();
 };
-const handleHouseButtonClick = (e) => {
-  studentsForm(students);
-};
-const getHouse = (e) => {
-  e.preventDefault();
 
-  const name = document.querySelector("#Enter-Student-Name").value;
+const getHouse = (e) => {
+ 
+  const name = document.querySelector("#Enter-Student-Name").value;// .value is getting the value of the text box(the name in this case).
+  if(name === '') // a blank string
+  {
+    alert("Name must be entered before sort is clicked!");
+    return;
+  }
+ 
   const house = houses[Math.floor(Math.random() * houses.length)];
   const id = 1;
 
@@ -37,10 +40,15 @@ const hogwartsForm = () => {
   domString = ` <div class="form-group">
                     <label for="Label-First-Year-Name">Enter First Year's Name</label>
                     <input type="text" class="form-control" id="Enter-Student-Name">
-                    <button type="submit" class="btn btn-light">Your House</button>
-                  </div>`;
+                    <a class="btn btn-light" href="#"  role="button" id="sort">Sort!</a>
+                    </div>`;
 
-  printToDom("#student-entry-form", domString);
+ 
+                  printToDom("#student-entry-form", domString);
+
+                  document.querySelector("#sort").addEventListener("click", getHouse); //submit is for buttons that submit info
+
+
 };
 const studentsForm = (students) => {
   let domString = "";
@@ -57,26 +65,25 @@ const studentsForm = (students) => {
   }
 
   printToDom("#students", domString);
+  document.querySelector("#students").addEventListener("click", expelButton);
+
 };
+ 
 
 const expelButton = (e) => {
   const targetType = e.target.type;
   const targetId = e.target.id;
-  console.log(students);
+
   if (targetType === "button") {
-    students.splice(targetId);
+    students.splice(targetId, 1);
   } 
   studentsForm(students);// refreshes the dom with the new array
 
-  console.log(students);
+  // console.log(students);
 };
 
 const ButtonEvents = () => {
-  document
-    .querySelector("#start")
-    .addEventListener("click", handleStartButtonClick);
-  document.querySelector("#students").addEventListener("click", expelButton);
-  document.querySelector("form").addEventListener("submit", getHouse); //submit is for buttons that submit info
+  document.querySelector("#start").addEventListener("click", handleStartButtonClick);
 };
 
 const init = () => {
